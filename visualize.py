@@ -136,8 +136,10 @@ def display_instances(image, boxes, masks, class_ids, class_names,
 
         # Mask Polygon
         # Pad to ensure proper polygons for masks that touch image edges.
+        #padded_mask = np.zeros(
+            #(mask.shape[0] + 2, mask.shape[1] + 2), dtype=np.uint8)
         padded_mask = np.zeros(
-            (mask.shape[0] + 2, mask.shape[1] + 2), dtype=np.uint8)
+            (mask.shape[0] + 2, mask.shape[1] + 2))   
         padded_mask[1:-1, 1:-1] = mask
         contours = find_contours(padded_mask, 0.5)
         for verts in contours:
@@ -335,7 +337,8 @@ def draw_boxes(image, boxes=None, refined_boxes=None,
 
     ax.set_title(title)
 
-    masked_image = image.astype(np.uint32).copy()
+    #masked_image = image.astype(np.uint32).copy()
+    masked_image = image.copy()
     for i in range(N):
         # Box visibility
         visibility = visibilities[i] if visibilities is not None else 1
@@ -391,8 +394,10 @@ def draw_boxes(image, boxes=None, refined_boxes=None,
             masked_image = apply_mask(masked_image, mask, color)
             # Mask Polygon
             # Pad to ensure proper polygons for masks that touch image edges.
+            #padded_mask = np.zeros(
+                #(mask.shape[0] + 2, mask.shape[1] + 2), dtype=np.uint8)
             padded_mask = np.zeros(
-                (mask.shape[0] + 2, mask.shape[1] + 2), dtype=np.uint8)
+                (mask.shape[0] + 2, mask.shape[1] + 2))  
             padded_mask[1:-1, 1:-1] = mask
             contours = find_contours(padded_mask, 0.5)
             for verts in contours:
@@ -400,7 +405,8 @@ def draw_boxes(image, boxes=None, refined_boxes=None,
                 verts = np.fliplr(verts) - 1
                 p = Polygon(verts, facecolor="none", edgecolor=color)
                 ax.add_patch(p)
-    ax.imshow(masked_image.astype(np.uint8))
+    #ax.imshow(masked_image.astype(np.uint8))
+    ax.imshow(masked_image)
 
 def plot_loss(loss, val_loss, save=True, log_dir=None):
     loss = np.array(loss)
